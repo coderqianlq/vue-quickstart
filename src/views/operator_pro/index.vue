@@ -307,6 +307,13 @@ export default {
   },
   methods: {
     handleSearch: function() {
+      if(!format.checkParams(this.merchantId, this.userId, this.name, this.idCard, this.mobile)) {
+        this.$message({
+          message: 'merchantId,userId,name,idCard,mobile不能同时为空',
+          type: 'warning'
+        });
+        return;
+      }
       this.loading = true;
       var obj = { merchantId: this.merchantId, userId: this.userId, name: this.name, idCard: this.idCard, mobile: this.mobile, authItem: this.authItem };
       let params = Object.assign({}, obj);
