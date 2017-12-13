@@ -19,6 +19,7 @@
             <span slot="title">QuickLook</span>
           </template>
           <el-menu-item-group>
+            <span slot="title">QuickLook</span>
             <el-menu-item index="/operator_pro">运营商数据</el-menu-item>
             <el-menu-item index="/ecommerce">电商数据</el-menu-item>
             <el-menu-item index="/wechat">微信数据</el-menu-item>
@@ -31,17 +32,14 @@
             <span slot="title">导航二</span>
           </template>
           <el-menu-item-group>
+            <span slot="title">TaobaoRecord</span>
             <el-menu-item index="/record">淘宝交易记录</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-submenu index="3">
-          <template slot="title">
-            <i class="el-icon-setting"></i>
+        <el-menu-item index="3">
+            <i class="el-icon-document"></i>
             <span slot="title">导航三</span>
-          </template>
-          <el-menu-item-group>
-            <el-menu-item index="3-1">运营商数据</el-menu-item>
-          </el-menu-item-group>
+        </el-menu-item>
         </el-submenu>
       </el-menu>
     </div>
@@ -108,7 +106,7 @@ main {
 }
 
 main .main-left {
-  text-align: center;
+  text-align: left;
   /*-webkit-box-flex: 0;
   -ms-flex: 0 0 200px;
   flex: 0 0 200px;*/
@@ -128,6 +126,10 @@ main .el-menu {
 
 main .demo-table-expand {
   font-size: 0;
+}
+
+main .el-menu-item-group {
+  background-color: #FCFCFC;
 }
 
 main .demo-table-expand label {

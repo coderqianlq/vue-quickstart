@@ -1,17 +1,15 @@
 import axios from 'axios';
 
-let base = '';
+export const getBaseInfoData = params => { return axios.get(`/getBaseInfoData`, { params: params }); };
 
-export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
+export const getDetailData = params => {return axios.get(`/getDetailInfoData`, { params: params }); };
 
-export const getUserList = params => { return axios.get(`${base}/user/list`, { params: params }); };
+export const getResult = params => {return axios.get(`/getExtractResult`, { params: params }); };
 
-export const getUserListPage = params => { return axios.get(`${base}/user/listpage`, { params: params }); };
+export const showResult = params => {return axios.get(`/showExtractPage`, { params: params }); };
 
-export const removeUser = params => { return axios.get(`${base}/user/remove`, { params: params }); };
+export const downloadResult = params => {return axios.get(`/downloadExtractPage`, { params: params }); };
 
-export const batchRemoveUser = params => { return axios.get(`${base}/user/batchremove`, { params: params }); };
+export const getTaobaoBaseInfo = params => {return axios.get(`/getTaobaoBaseInfo`, { params: params }); };
 
-export const editUser = params => { return axios.get(`${base}/user/edit`, { params: params }); };
-
-export const addUser = params => { return axios.get(`${base}/user/add`, { params: params }); };
+export const getTaobaoRecord = params => {return axios.get(`/getTaobaoTrade`, { params: params }); };

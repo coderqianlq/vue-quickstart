@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import operator_pro from '@/views/operator_pro'
+import operator_pro_result from '@/views/operator_pro/result'
 import ecommerce from '@/views/ecommerce'
 import wechat from '@/views/wechat'
 import jd from '@/views/jd'
@@ -43,6 +44,11 @@ export default new Router({
       path: '/record',
       name: '淘宝交易记录',
       component: record,
+    },
+    {
+      path: '/operator_pro_result',
+      name: '运营商记录',
+      component: operator_pro_result,
     }
   ]
 })

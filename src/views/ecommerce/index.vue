@@ -2,21 +2,28 @@
 <div id="ecommerce">
   <el-form>
     <el-row :gutter="24">
-      <el-col :span="5">
+      <el-col :span="4">
         <el-form-item>
           <el-input v-model="merchantId" placeholder="请输入内容">
             <template slot="prepend">商户号</template>
           </el-input>
         </el-form-item>
       </el-col>
-      <el-col :span="5">
+      <el-col :span="4">
+        <el-form-item>
+          <el-input v-model="userId" placeholder="请输入内容">
+            <template slot="prepend">userId</template>
+          </el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="4">
         <el-form-item>
           <el-input v-model="name" placeholder="请输入内容">
             <template slot="prepend">姓 名</template>
           </el-input>
         </el-form-item>
       </el-col>
-      <el-col :span="5">
+      <el-col :span="4">
         <el-form-item>
           <el-input v-model="mobile" placeholder="请输入内容">
             <template slot="prepend">手机号</template>
@@ -30,13 +37,13 @@
           </el-input>
         </el-form-item>
       </el-col>
-      <el-col :span="3">
+      <el-col :span="2">
         <el-button type="primary" icon="search" style="float:right;" @click="handleSearch">搜索</el-button>
       </el-col>
     </el-row>
   </el-form>
 
-  <el-table :data="baseInfoData.slice((currentPage-1)*pageSize,currentPage*pageSize)" v-loading="loading" element-loading-text="拼命加载中" style="width: 100%">
+  <el-table :data="baseInfoData.slice((currentPage-1)*pageSize,currentPage*pageSize)" v-loading="loading" element-loading-text="拼命加载中" stripe="true" style="width: 100%">
     <el-table-column type="expand">
       <template scope="props">
         <el-form label-position="left" inline class="demo-table-expand">
@@ -80,7 +87,7 @@
             <span>{{ handleAlipayRegistrationDatetime(props.row.baseInfo.alipayRegistrationDatetime) }}</span>
           </el-form-item>
           <el-form-item label="是否实名认证">
-            <span>{{ handleIsVerified(props.row.baseInfo.isVerified) }}</span>
+            <span>{{ handleStatus(props.row.baseInfo.isVerified) }}</span>
           </el-form-item>
           <el-form-item label="花呗额度" class="important">
             <span>{{ props.row.baseInfo.huabeiAmount }}</span>
@@ -128,7 +135,7 @@
             <span>{{ props.row.baseInfo.huabeiOriginalAmount }}</span>
           </el-form-item>
           <el-form-item label="支付宝余额支付开关">
-            <span>{{ handleBalancePaymentEnable(props.row.baseInfo.balancePaymentEnable)}}</span>
+            <span>{{ handleStatus(props.row.baseInfo.balancePaymentEnable)}}</span>
           </el-form-item>
           <el-form-item label="余额宝累计收益">
             <span>{{ props.row.baseInfo.yuebaoIncome }}</span>
@@ -146,11 +153,11 @@
     </el-table-column>
     <el-table-column prop="baseInfo.alipayAccount" label="支付宝账号" width="180">
     </el-table-column>
-    <el-table-column prop="baseInfo.taobaoAccount" label="绑定的淘宝账号" width="150">
+    <el-table-column prop="baseInfo.taobaoAccount" label="绑定的淘宝账号" width="180">
     </el-table-column>
     <el-table-column label="操作">
       <template scope="scope">
-        <el-button size="small" :plain="true" type="info" @click="getStorage">storage</el-button>
+        <el-button size="small" :plain="true" type="info" @click="getResult(scope.row.baseInfo.userId)">storage</el-button>
         <el-button size="small" :plain="true" type="danger" @click="getDetailData(scope.row.baseInfo.userId, scope.row.baseInfo.id)">view</el-button>
       </template>
     </el-table-column>
@@ -170,19 +177,59 @@
     </div>
   </el-dialog>
 
-  <el-dialog title="详细信息" :visible.sync="storageVisible" size="large">
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="paymentAccounts" name="first">
+  <el-dialog title="详细信息" :visible.sync="resultVisible" size="large">
+    <el-table :data="resultData" border max-height="600" stripe="true" style="width: 100%">
+      <el-table-column type="index" label="序号" width="100">
+      </el-table-column>
+      <el-table-column prop="userId" label="userId" width="100">
+      </el-table-column>
+      <el-table-column prop="taskId" label="taskId" width="100">
+      </el-table-column>
+      <el-table-column prop="websiteId" label="websiteId" width="120">
+      </el-table-column>
+      <el-table-column prop="url" label="url" width="200" show-overflow-tooltip="true">
+      </el-table-column>
+      <el-table-column prop="resultType" label="resultType" width="150" show-overflow-tooltip="true" sortable>
+      </el-table-column>
+      <el-table-column prop="storagePath" label="storagePath" width="200" show-overflow-tooltip="true">
+      </el-table-column>
+      <el-table-column prop="remark" label="remark" width="150" show-overflow-tooltip="true">
+      </el-table-column>
+      <el-table-column label="updatedAt" width="200">
         <template scope="props">
-          <el-button v-for="i in num" :key="num" @click="showStorage(i)">{{ i }}</el-button>
+          <span>{{ dateFormat(props.row.updatedAt) }}</span>
         </template>
-      </el-tab-pane>
-      <el-tab-pane label="bankConsumeRecords" name="second">bankConsumeRecords</el-tab-pane>
-      <el-tab-pane label="trades" name="third">trades</el-tab-pane>
-      <el-tab-pane label="taoTrades" name="fourth">taoTrades</el-tab-pane>
-    </el-tabs>
+      </el-table-column>
+      <el-table-column label="操作" width="200">
+        <template scope="props">
+          <el-button type="primary" size="small" @click="show(props.row.storagePath)" icon="search"></el-button>
+          <el-button type="primary" size="small" @click="download(props.row.storagePath)">↓</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="storageVisible = false">确 认</el-button>
+      <el-button @click="resultVisible = false">确 认</el-button>
+    </div>
+  </el-dialog>
+
+  <el-dialog title="详细信息" :visible.sync="pageVisible" size="large">
+    <el-form>
+      <el-row :gutter="24">
+        <el-col :span="4" v-for="(content, page) in pageData" :key="page" style="margin-bottom: 20px">
+          <el-card :body-style="{ padding: '0px' }">
+            <img src="~/@/assets/page.jpg" class="image">
+            <div style="padding: 14px">
+              <span>{{ page }}</span>
+              <div class="bottom clearfix">
+                <el-button type="text" class="button" @click="view(content)">查看</el-button>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="pageVisible = false">确 认</el-button>
     </div>
   </el-dialog>
   <!-- <router-view class="view"></router-view> -->
@@ -191,93 +238,118 @@
 </template>
 
 <script>
+import format from '@/common/js/format.js';
+import { getBaseInfoData, getDetailData, getResult, showResult, downloadResult } from '@/api/api.js';
+
 export default {
   name: 'ecommerce',
   data: function() {
     return {
       merchantId: '',
+      userId: '',
       name: '',
       idCard: '',
       mobile: '',
       authItem: 'ecommerce',
       baseInfoData: [],
       detailData: {},
+      resultData: [],
+      pageData: new Map(),
       currentPage: 1,
       pageSize: 10,
       totalCount: 100,
       loading: false,
+      pageVisible: false,
       detailVisible: false,
-      storageVisible: false,
-      paginationVisible: false
+      resultVisible: false,
+      paginationVisible: false,
+      baseUrl: 'http://172.19.44.24:8182/downloadExtractPage?key='
     }
   },
   methods: {
     handleSearch: function() {
-      this.getData(this.merchantId, this.name, this.idCard, this.mobile, this.authItem);
-    },
-    getData: function(merchantId, name, idCard, mobile, authItem) {
       this.loading = true;
-      this.$http.get('/api/getBaseInfoData', {
-        params: {
-          merchantId: merchantId,
-          name: name,
-          idCard: idCard,
-          mobile: mobile,
-          authItem: authItem
-        }
-      }).then(
+      var obj = { merchantId: this.merchantId, userId: this.userId, name: this.name, idCard: this.idCard, mobile: this.mobile, authItem: this.authItem };
+      let params = Object.assign({}, obj);
+      getBaseInfoData(params).then(
         res => {
           this.baseInfoData = res.data;
-          this.loading = false;
           this.totalCount = this.baseInfoData.length;
           this.paginationVisible = true;
         },
         err => {
-          this.loading = false;
           this.$alert(err.message);
-        });
+      });
+      this.loading = false;
     },
     getDetailData: function(userId, baseInfoId) {
-      this.$http.get('/api/getDetailInfoData', {
-        params: {
-          userId: userId,
-          baseInfoId: baseInfoId,
-          authItem: this.authItem,
-          isReport: false,
-        }
-      }).then(
+      var obj = { userId: userId, baseInfoId: baseInfoId, authItem: this.authItem, isReport: false };
+      let params = Object.assign({}, obj);
+      getDetailData(params).then(
         res => {
           this.detailData = res.data;
           this.detailVisible = true;
         },
         err => {
           this.$alert(err.message);
-        });
+      });
     },
-    getStorage: function() {
-      this.storageVisible = true;
+    getResult: function(userId) {
+      var obj = { userId: userId, authItem: this.authItem };
+      let params = Object.assign({}, obj);
+      getResult(params).then(
+        res => {
+          this.resultData = res.data;
+          this.resultVisible = true;
+        },
+        err => {
+          this.$alert(err.message);
+      });
     },
-    handleIsVerified: function(isVerified) {
-      return isVerified == true ? "是" : "否";
+    show: function(key) {
+      let params = Object.assign({}, {key: key});
+      showResult(params).then(
+        res => {
+          this.pageData = res.data;
+          this.pageVisible = true;
+        },
+        err => {
+          this.$alert(err.message);
+      });
+    },
+    download: function(key) {
+      let params = Object.assign({}, {key: key});
+      downloadResult(params).then(
+        res => {
+            window.open(this.baseUrl + key);
+        },
+        err => {
+          this.$alert(err.message);
+      });
+    },
+    view: function(content) {
+      var OpenWindow = window.open();
+      OpenWindow.document.write(content);
+      OpenWindow.document.close();
     },
     handleAlipayRegistrationDatetime: function(alipayRegistrationDatetime) {
-      return new Date(parseInt(alipayRegistrationDatetime)).toLocaleString().replace(/:\d{1,2}$/, ' ');
+      return format.handleAlipayRegistrationDatetime(alipayRegistrationDatetime);
     },
     handleHuabeiStatus: function(huabeiStatus) {
-      return huabeiStatus == 0 ? "未冻结" : "冻结";
+      return format.handleHuabeiStatus(huabeiStatus);
     },
     handleStatus: function(status) {
-      return status == 1 ? "是" : "否";
+      return format.handleStatus(status);
     },
-    handleBalancePaymentEnable: function(halancePaymentEnable) {
-      return halancePaymentEnable == 1 ? "是" : "否";
+    dateFormat: function(timestamp) {
+      return format.dateFormat(timestamp);
     },
     handleSizeChange: function(val) {
       this.pageSize = val;
     },
     handleCurrentChange: function(val) {
       this.currentPage = val;
-    },
+    }
   }
 }
 </script>
@@ -285,5 +357,36 @@ export default {
 <style>
 .important {
   color: red;
+}
+
+el-table-column {
+  table-layout: fixed;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bottom {
+  margin-top: 13px;
+  line-height: 12px;
+}
+
+.button {
+  padding: 0;
+  float: right;
+}
+
+.image {
+  width: 100%;
+  display: block;
+}
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+
+.clearfix:after {
+  clear: both
 }
 </style>

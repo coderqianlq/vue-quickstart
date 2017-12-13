@@ -22,7 +22,7 @@
     </el-row>
   </el-form>
 
-  <el-table :data="recordData.slice((pagenum-1)*pagesize,pagenum*pagesize)" v-loading="loading" element-loading-text="拼命加载中" style="width: 100%">
+  <el-table :data="recordData.slice((pagenum-1)*pagesize,pagenum*pagesize)" v-loading="loading" element-loading-text="拼命加载中" stripe="true" style="width: 100%">
     <el-table-column type="index" width="60">
     </el-table-column>
     <el-table-column prop="id" label="ID" width="80">
@@ -50,52 +50,52 @@
   </el-table>
 
   <el-dialog title="详细信息" :visible.sync="recordFormVisible" size="large">
-      <el-table :data="detailData.slice((currentpagenum-1)*currentpagesize,currentpagenum*currentpagesize)" border max-height="600" style="width: 100%">
-        <el-table-column label="序号" width="100">
-          <template scope="props">
+    <el-table :data="detailData.slice((currentpagenum-1)*currentpagesize,currentpagenum*currentpagesize)" border max-height="600" style="width: 100%">
+      <el-table-column label="序号" width="100">
+        <template scope="props">
             <span>{{ (props.$index+1)+((currentpagenum-1)*currentpagesize) }}</span>
           </template>
-        </el-table-column>
-        <el-table-column prop="baseInfoId" label="baseInfoId" width="150">
-        </el-table-column>
-        <el-table-column prop="userId" label="userId" width="150">
-        </el-table-column>
-        <el-table-column prop="title" label="title" width="300">
-        </el-table-column>
-        <el-table-column prop="amount" label="amount" width="100">
-        </el-table-column>
-        <el-table-column prop="tradeNo" label="tradeNo" width="300">
-        </el-table-column>
-        <el-table-column label="tradeTime" width="200">
-          <template scope="props">
+      </el-table-column>
+      <el-table-column prop="baseInfoId" label="baseInfoId" width="180">
+      </el-table-column>
+      <el-table-column prop="userId" label="userId" width="150">
+      </el-table-column>
+      <el-table-column prop="title" label="title" width="300">
+      </el-table-column>
+      <el-table-column prop="amount" label="amount" width="100">
+      </el-table-column>
+      <el-table-column prop="tradeNo" label="tradeNo" width="300">
+      </el-table-column>
+      <el-table-column label="tradeTime" width="200">
+        <template scope="props">
             <span>{{ dateFormat(props.row.tradeTime) }}</span>
           </template>
-        </el-table-column>
-        <el-table-column prop="tradeStatus" label="tradeStatus" width="150">
-        </el-table-column>
-        <el-table-column prop="tradeType" label="tradeType" width="150">
-        </el-table-column>
-        <el-table-column prop="otherSide" label="otherSide" width="300">
-        </el-table-column>
-        <el-table-column prop="txTpyeId" label="txTpyeId" width="100">
-        </el-table-column>
-        <el-table-column prop="behaviorLableId" label="behaviorLableId" width="150">
-        </el-table-column>
-        <el-table-column prop="tradeDateilUrl" label="tradeDateilUrl" width="300">
-        </el-table-column>
-        <el-table-column prop="otherSideAccount" label="otherSideAccount" width="200">
-        </el-table-column>
-        <el-table-column prop="otherSideName" label="otherSideName" width="200">
-        </el-table-column>
-        <el-table-column prop="status" label="status" width="100">
-        </el-table-column>
-      </el-table>
-      <div align="right" style="margin-top: 20px">
-        <el-pagination @size-change="pagesizeChange" @current-change="pagenumChange" :current-page="currentpagenum" :page-sizes="[10, 15, 20, 25, 30]" :page-size="currentpagesize" layout="total, sizes, prev, pager, next, jumper" :total="recordCount">
-        </el-pagination>
-      </div>
+      </el-table-column>
+      <el-table-column prop="tradeStatus" label="tradeStatus" width="150">
+      </el-table-column>
+      <el-table-column prop="tradeType" label="tradeType" width="150">
+      </el-table-column>
+      <el-table-column prop="otherSide" label="otherSide" width="300">
+      </el-table-column>
+      <el-table-column prop="txTpyeId" label="txTpyeId" width="100">
+      </el-table-column>
+      <el-table-column prop="behaviorLableId" label="behaviorLableId" width="150">
+      </el-table-column>
+      <el-table-column prop="tradeDateilUrl" label="tradeDateilUrl" width="300">
+      </el-table-column>
+      <el-table-column prop="otherSideAccount" label="otherSideAccount" width="200">
+      </el-table-column>
+      <el-table-column prop="otherSideName" label="otherSideName" width="200">
+      </el-table-column>
+      <el-table-column prop="status" label="status" width="100">
+      </el-table-column>
+    </el-table>
+    <div align="right" style="margin-top: 20px">
+      <el-pagination @size-change="pagesizeChange" @current-change="pagenumChange" :current-page="currentpagenum" :page-sizes="[10, 15, 20, 25, 30]" :page-size="currentpagesize" layout="total, sizes, prev, pager, next, jumper" :total="recordCount">
+      </el-pagination>
+    </div>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="recordFormVisible = false">确 认</el-button>
+      <el-button @click="recordFormVisible = false">关 闭</el-button>
     </div>
   </el-dialog>
 
@@ -108,6 +108,9 @@
 </template>
 
 <script>
+import format from '@/common/js/format.js';
+import { getTaobaoBaseInfo, getTaobaoRecord } from '@/api/api.js';
+
 export default {
   name: 'record',
   data: function() {
@@ -133,14 +136,9 @@ export default {
     },
     getData: function(userId, baseInfoId, pagenum, pagesize) {
       this.loading = true;
-      this.$http.get('/api/getTaobaoBaseInfo', {
-        params: {
-          userId: userId,
-          baseInfoId: baseInfoId,
-          pageNum: pagenum,
-          pageSize: pagesize
-        }
-      }).then(
+      let obj = { userId: userId, baseInfoId: baseInfoId, pageNum: pagenum, pageSize: pagesize };
+      let params = Object.assign({}, obj);
+      getTaobaoBaseInfo(params).then(
         res => {
           this.recordData = res.data;
           this.loading = false;
@@ -149,15 +147,12 @@ export default {
         err => {
           this.loading = false;
           this.$alert(err.message);
-        });
+      });
     },
     getRecord: function(userId, baseInfoId) {
-      this.$http.get('/api/getTaobaoTrade', {
-        params: {
-          userId: userId,
-          baseInfoId: baseInfoId
-        }
-      }).then(
+      let obj = { userId: userId, baseInfoId: baseInfoId };
+      let params = Object.assign({}, obj);
+      getTaobaoRecord(params).then(
         res => {
           this.detailData = res.data;
           this.recordCount = this.detailData.length;
@@ -183,7 +178,7 @@ export default {
       this.currentpagenum = val;
     },
     dateFormat: function(timestamp) {
-      return new Date(parseInt(timestamp)).toLocaleString();
+      return format.dateFormat(timestamp);
     }
   }
 }
