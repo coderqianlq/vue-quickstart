@@ -103,6 +103,13 @@ export default {
   },
   methods: {
     handleSearch: function() {
+      if(!format.checkParams(this.merchantId, this.userId, this.name, this.idCard, this.mobile)) {
+        this.$message({
+          message: 'merchantId,userId,name,idCard,mobile不能同时为空',
+          type: 'warning'
+        });
+        return;
+      }
       this.getData(this.merchantId, this.userId, this.name, this.idCard, this.mobile, this.authItem);
     },
     getData: function(merchantId, userId, name, idCard, mobile, authItem) {
