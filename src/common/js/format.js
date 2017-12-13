@@ -23,5 +23,11 @@ export default {
     } else if (type == 2) {
       return callType == 1 ? '发送' : '接收';
     }
+  },
+  checkParams: function(merchantId, userId, name, idCard, mobile) {
+    if(merchantId == "" && userId == "" && name == "" && idCard == "" && mobile == ""){
+      return false;
+    }
+    return true;
   }
 }
