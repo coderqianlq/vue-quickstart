@@ -25,7 +25,7 @@
   <el-table :data="recordData.slice((pagenum-1)*pagesize,pagenum*pagesize)" v-loading="loading" element-loading-text="拼命加载中" stripe="true" style="width: 100%">
     <el-table-column type="index" width="60">
     </el-table-column>
-    <el-table-column prop="id" label="ID" width="80">
+    <el-table-column prop="id" label="ID" width="120">
     </el-table-column>
     <el-table-column prop="userId" label="UserID" width="100">
     </el-table-column>
@@ -56,7 +56,7 @@
             <span>{{ (props.$index+1)+((currentpagenum-1)*currentpagesize) }}</span>
           </template>
       </el-table-column>
-      <el-table-column prop="baseInfoId" label="baseInfoId" width="180">
+      <el-table-column prop="baseInfoId" label="baseInfoId" width="150">
       </el-table-column>
       <el-table-column prop="userId" label="userId" width="150">
       </el-table-column>
