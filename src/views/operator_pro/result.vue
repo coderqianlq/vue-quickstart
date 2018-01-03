@@ -10,7 +10,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="18">
-        <el-button type="primary" icon="search" style="float:right;" @click="handleSearch">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" style="float:right;" @click="handleSearch">搜索</el-button>
       </el-col>
     </el-row>
   </el-form>
@@ -25,7 +25,7 @@
     <el-table-column prop="telNum" label="手机号码" width="120">
     </el-table-column>
     <el-table-column label="操作">
-      <template scope="props">
+      <template slot-scope="props">
       </template>
     </el-table-column>
   </el-table>

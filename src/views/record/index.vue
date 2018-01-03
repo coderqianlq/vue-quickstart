@@ -17,7 +17,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-button type="primary" icon="search" style="float:right;" @click="handleSearch">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" style="float:right;" @click="handleSearch">搜索</el-button>
       </el-col>
     </el-row>
   </el-form>
@@ -38,12 +38,12 @@
     <el-table-column prop="alipayAccount" label="支付宝账号" width="200">
     </el-table-column>
     <el-table-column label="最近更新时间" width="200">
-      <template scope="scope">
+      <template slot-scope="scope">
         <span>{{ dateFormat(scope.row.lastUpdateDate) }}</span>
       </template>
     </el-table-column>
     <el-table-column label="操作">
-      <template scope="scope">
+      <template slot-scope="scope">
           <el-button size="small" @click="getRecord(scope.row.userId, scope.row.id)">view</el-button>
       </template>
     </el-table-column>
@@ -52,7 +52,7 @@
   <el-dialog title="详细信息" :visible.sync="recordFormVisible" size="large">
     <el-table :data="detailData.slice((currentpagenum-1)*currentpagesize,currentpagenum*currentpagesize)" border max-height="600" style="width: 100%">
       <el-table-column label="序号" width="100">
-        <template scope="props">
+        <template slot-scope="props">
             <span>{{ (props.$index+1)+((currentpagenum-1)*currentpagesize) }}</span>
           </template>
       </el-table-column>
@@ -67,7 +67,7 @@
       <el-table-column prop="tradeNo" label="tradeNo" width="300">
       </el-table-column>
       <el-table-column label="tradeTime" width="200">
-        <template scope="props">
+        <template slot-scope="props">
             <span>{{ dateFormat(props.row.tradeTime) }}</span>
           </template>
       </el-table-column>

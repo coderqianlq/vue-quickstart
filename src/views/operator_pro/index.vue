@@ -38,14 +38,14 @@
         </el-form-item>
       </el-col>
       <el-col :span="2">
-        <el-button type="primary" icon="search" style="float:right;" @click="handleSearch">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" style="float:right;" @click="handleSearch">搜索</el-button>
       </el-col>
     </el-row>
   </el-form>
 
   <el-table :data="baseInfoData" v-loading="loading" style="width: 100%">
     <el-table-column type="expand">
-      <template scope="props">
+      <template slot-scope="props">
         <el-form label-position="left" inline class="demo-table-expand">
           <el-form-item label="id">
             <span>{{ props.row.baseInfo.id }}</span>
@@ -110,12 +110,12 @@
     <el-table-column prop="baseInfo.telNumAttribution" label="运营商" width="100">
     </el-table-column>
     <el-table-column label="最近更新时间" width="200">
-      <template scope="props">
+      <template slot-scope="props">
         <span>{{ dateFormat(props.row.baseInfo.lastUpdateDate) }}</span>
       </template>
     </el-table-column>
     <el-table-column label="操作">
-      <template scope="scope">
+      <template slot-scope="scope">
         <el-button size="small" :plain="true" type="info" @click="getResult(scope.row.baseInfo.userId)">storage</el-button>
         <el-button size="small" :plain="true" type="danger" @click="getDetailData(scope.row.baseInfo.userId, scope.row.baseInfo.id)">view</el-button>
       </template>
@@ -129,7 +129,7 @@
           <el-table-column type="index" width="100">
           </el-table-column>
           <el-table-column prop="billMonth" label="账单月份" width="200">
-            <template scope="props">
+            <template slot-scope="props">
               <span>{{ handleBillMonth(props.row.billMonth) }}</span>
             </template>
           </el-table-column>
@@ -144,24 +144,24 @@
       <el-tab-pane label="通话记录" name="second">
         <el-table :data="callDetails.slice((callPagenum-1)*callPagesize,callPagenum*callPagesize)" border max-height="600" stripe="true" style="width: 100%">
           <el-table-column label="序号" width="100">
-            <template scope="props">
+            <template slot-scope="props">
                 <span>{{ (props.$index+1)+((callPagenum-1)*callPagesize) }}</span>
               </template>
           </el-table-column>
           <el-table-column prop="callMonth" label="通话月份" width="200">
-            <template scope="props">
+            <template slot-scope="props">
               <span>{{ handleBillMonth(props.row.callMonth) }}</span>
             </template>
           </el-table-column>
           <el-table-column label="通话时间" width="200">
-            <template scope="props">
+            <template slot-scope="props">
               <span>{{ dateFormat(props.row.callStartTime) }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="otherTelNum" label="通话号码" width="200">
           </el-table-column>
           <el-table-column label="呼叫类型" width="100">
-            <template scope="props">
+            <template slot-scope="props">
               <span>{{ handleType(props.row.callType, 1) }}</span>
             </template>
           </el-table-column>
@@ -180,19 +180,19 @@
       <el-tab-pane label="短信记录" name="third">
         <el-table :data="shortMessageDetails.slice((smsPagenum-1)*smsPagesize,smsPagenum*smsPagesize)" border max-height="600" stripe="true" style="width: 100%">
           <el-table-column label="序号" width="100">
-            <template scope="props">
+            <template slot-scope="props">
                 <span>{{ (props.$index+1)+((smsPagenum-1)*smsPagesize) }}</span>
               </template>
           </el-table-column>
           <el-table-column label="发送／接收时间" width="200">
-            <template scope="props">
+            <template slot-scope="props">
               <span>{{ dateFormat(props.row.smsTime) }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="otherTelNum" label="对方号码" width="200">
           </el-table-column>
           <el-table-column label="收发类型" width="100">
-            <template scope="props">
+            <template slot-scope="props">
               <span>{{ handleType(props.row.smsType, 2) }}</span>
             </template>
           </el-table-column>
@@ -222,23 +222,23 @@
       </el-table-column>
       <el-table-column prop="websiteId" label="websiteId" width="120">
       </el-table-column>
-      <el-table-column prop="url" label="url" width="200">
+      <el-table-column prop="url" label="url" width="200" show-overflow-tooltip="true">
       </el-table-column>
-      <el-table-column prop="resultType" label="resultType" width="150" sortable>
+      <el-table-column prop="resultType" label="resultType" width="150" show-overflow-tooltip="true" sortable>
       </el-table-column>
-      <el-table-column prop="storagePath" label="storagePath" width="200">
+      <el-table-column prop="storagePath" label="storagePath" show-overflow-tooltip="true" width="200">
       </el-table-column>
-      <el-table-column prop="remark" label="remark" width="150">
+      <el-table-column prop="remark" label="remark" show-overflow-tooltip="true" width="150">
       </el-table-column>
       <el-table-column label="updatedAt" width="200">
-        <template scope="props">
+        <template slot-scope="props">
           <span>{{ dateFormat(props.row.updatedAt) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200">
-        <template scope="props">
-          <el-button type="primary" size="small" @click="show(props.row.storagePath)" icon="search"></el-button>
-          <el-button type="primary" size="small" @click="download(props.row.storagePath)">↓</el-button>
+        <template slot-scope="props">
+          <el-button type="primary" size="small" @click="show(props.row.storagePath)" icon="el-icon-view"></el-button>
+          <el-button type="primary" size="small" @click="download(props.row.storagePath)" icon="el-icon-download"></el-button>
         </template>
       </el-table-column>
     </el-table>

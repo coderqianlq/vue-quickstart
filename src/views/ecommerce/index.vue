@@ -38,14 +38,14 @@
         </el-form-item>
       </el-col>
       <el-col :span="2">
-        <el-button type="primary" icon="search" style="float:right;" @click="handleSearch">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" style="float:right;" @click="handleSearch">搜索</el-button>
       </el-col>
     </el-row>
   </el-form>
 
   <el-table :data="baseInfoData.slice((currentPage-1)*pageSize,currentPage*pageSize)" v-loading="loading" element-loading-text="拼命加载中" stripe="true" style="width: 100%">
     <el-table-column type="expand">
-      <template scope="props">
+      <template slot-scope="props">
         <el-form label-position="left" inline class="demo-table-expand">
           <el-form-item label="baseInfoId">
             <span>{{ props.row.baseInfo.id }}</span>
@@ -156,7 +156,7 @@
     <el-table-column prop="baseInfo.taobaoAccount" label="绑定的淘宝账号" width="180">
     </el-table-column>
     <el-table-column label="操作">
-      <template scope="scope">
+      <template slot-scope="scope">
         <el-button size="small" :plain="true" type="info" @click="getResult(scope.row.baseInfo.userId)">storage</el-button>
         <el-button size="small" :plain="true" type="danger" @click="getDetailData(scope.row.baseInfo.userId, scope.row.baseInfo.id)">view</el-button>
       </template>
@@ -196,14 +196,14 @@
       <el-table-column prop="remark" label="remark" width="150" show-overflow-tooltip="true">
       </el-table-column>
       <el-table-column label="updatedAt" width="200">
-        <template scope="props">
+        <template slot-scope="props">
           <span>{{ dateFormat(props.row.updatedAt) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200">
-        <template scope="props">
-          <el-button type="primary" size="small" @click="show(props.row.storagePath)" icon="search"></el-button>
-          <el-button type="primary" size="small" @click="download(props.row.storagePath)">↓</el-button>
+        <template slot-scope="props">
+          <el-button type="primary" size="small" @click="show(props.row.storagePath)" icon="el-icon-view"></el-button>
+          <el-button type="primary" size="small" @click="download(props.row.storagePath)" icon="el-icon-download"></el-button>
         </template>
       </el-table-column>
     </el-table>

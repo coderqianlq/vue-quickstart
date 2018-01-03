@@ -38,7 +38,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="2">
-        <el-button type="primary" icon="search" style="float:right;" @click="handleSearch">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" style="float:right;" @click="handleSearch">搜索</el-button>
       </el-col>
     </el-row>
   </el-form>
@@ -59,12 +59,12 @@
     <el-table-column prop="baseInfo.jtBlance" label="金条余额" width="120">
     </el-table-column>
     <el-table-column label="最近更新时间" width="200">
-      <template scope="props">
+      <template slot-scope="props">
         <span>{{ dateFormat(props.row.baseInfo.lastUpdateDate) }}</span>
       </template>
     </el-table-column>
     <el-table-column label="操作">
-      <template scope="scope">
+      <template slot-scope="scope">
         <el-button size="small" :plain="true" type="info" @click="getResult(scope.row.baseInfo.userId)">storage</el-button>
         <el-button size="small" :plain="true" type="danger" @click="getDetailData(scope.row.baseInfo.userId, scope.row.baseInfo.id)">view</el-button>
       </template>
