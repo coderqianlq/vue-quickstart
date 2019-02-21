@@ -1,4 +1,4 @@
-# quicklook
+# quickstart
 
 > A Vue.js project
 
